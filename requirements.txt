@@ -1,0 +1,11 @@
+# Medical AI Expert Discovery System
+
+# Core dependencies
+requests>=2.31.0
+PyYAML>=6.0
+
+# Optional: Tavily API for web search
+tavily-python>=0.3.0
+
+# Optional: For data export
+pandas>=2.0.0

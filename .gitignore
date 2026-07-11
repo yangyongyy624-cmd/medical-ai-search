@@ -1,0 +1,117 @@
+# .gitignore for Medical AI Search
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+
+# 环境变量和 API Keys
+.env
+.env.local
+.env.*.local
+*.env
+credentials/
+*.key
+*.pem
+secrets/
+
+# 本地配置 (包含敏感信息)
+.hermes/
+.openclaw/
+.claude/
+.codex/
+hermes-agent/
+config.json
+openclaw.json
+settings.json
+auth.json
+
+# 日志文件
+*.log
+logs/
+*.log.*
+
+# 缓存
+.cache/
+.pytest_cache/
+.mypy_cache/
+htmlcov/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# 输出文件 (用户数据)
+ppt_output/
+pmc_fulltexts/
+*.pdf
+*.pptx
+output/
+data/
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+
+# Jupyter
+.ipynb_checkpoints
+
+# 测试
+.coverage
+.tox/
+.nox/
+htmlcov/
+
+# 文档构建
+docs/_build/
+site/
+
+# 大文件
+*.gz
+*.zip
+*.tar
+*.tar.gz
+
+# 数据库
+*.db
+*.sqlite
+*.sqlite3
+
+# 特定于项目的敏感文件
+Medical-AI/execution_log.md
+Medical-AI/logs/
+Medical-AI/ppt_output/
+Medical-AI/pmc_fulltexts/
+
+# Obsidian Vault (个人笔记)
+"Obsidian Vault"/
+*.md.bak
+*.md.backup
+
+# 备份文件
+*_backup/
+*_backup.*
+backup_*/
+*.backup
+
+# 用户特定文件
+~/Desktop/*/
+~/Documents/*/
