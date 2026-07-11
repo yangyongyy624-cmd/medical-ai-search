@@ -1,41 +1,93 @@
-# AI Expert Discovery Agent
+# AI Medical Expert Discovery System
 
-**智能领域专家发现系统 - 开创性文献检索工具**
+**AI 医学领域专家发现系统** - 找到行业内真正的大佬，而不只是发文章最多的人
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Version: 1.0.0](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/yourusername/medical-ai-search)
+[![Version: 2.0](https://img.shields.io/badge/version-2.0-green.svg)](https://github.com/YOUR_USERNAME/medical-ai-search/releases)
 
 ---
 
-##  核心创新
+##  核心理念
 
-> **传统方法**: 检索主题 → 希望找到开创性文献  
-> **AI Agent 方法**: 搜索专家 → 检索专家文章 → 按年份找到开创性文献
+> **传统检索**: 找到"发文章最多的人"  
+> **我们的方法**: 找到"定义行业的人"
 
 ---
 
-##  为什么需要这个工具？
+##  核心功能
 
-### 问题背景
+### 1. 行业大佬发现 (第一性原理版)
 
-1. **PubMed 数据库错误**: PMID 可能指向错误文章
-2. **检索词演化**: 全称→缩写，早期文献匹配不到
-3. **排序偏差**: 新文章优先，开创性文献被挤到后面
-4. **API 限制**: 参考文献只返回前 10 篇
+直接搜索身份标签，不绕弯子：
 
-### 解决方案
+```python
+from simple_big_shot_finder import SimpleBigShotFinder
 
+finder = SimpleBigShotFinder()
+
+# 找到所有行业大佬 (不设上限)
+big_shots = finder.find_big_shots("stem cell CAR-T")
+
+# 输出:
+# 1. Carl H. June - 学会主席 + 奖项获得者 + 指南作者
+# 2. Michel Sadelain - 指南作者 + 开创性研究者
+# 3. ...
 ```
-通过专家名字检索 → 绕过所有问题！
+
+**搜索的身份标签**:
+- ✅ 学会主席/主委 (`society president`)
+- ✅ 指南第一/通讯作者 (`guideline author`)
+- ✅ 奖项获得者 (`Nobel Prize`, `Lasker Award`)
+- ✅ 大会主席 (`conference chair`)
+
+---
+
+### 2. 大佬文献调研一键执行
+
+找到大佬后，自动检索他们的高分文献：
+
+```python
+from big_shot_literature_survey import BigShotLiteratureSurvey
+
+surveyor = BigShotLiteratureSurvey()
+
+# 一键执行: 找大佬 + 检索高分文献 + 生成 Obsidian 笔记
+result = surveyor.survey("rTMS depression", top_n=10)
+
+# 输出:
+# ✅ 10 位大佬
+# ✅ 每位大佬的 3-5 篇高分文献
+# ✅ Obsidian 笔记 (双向链接)
 ```
 
-| 问题 | 传统方法 | AI Agent |
-|------|----------|----------|
-| PMID 错误 |  找不到 | ✅ 绕过 PMID |
-| 检索词演化 | ❌ 找不到 | ✅ 专家名字稳定 |
-| 排序偏差 | ❌ 早期文献靠后 | ✅ 按年份排序 |
-| API 限制 |  只返回 10 篇 | ✅ 检索作者所有文章 |
+**高分期刊过滤**:
+- Nature/Science/Cell
+- NEJM/Lancet/BMJ
+- Brain Stimulation
+- American Journal of Psychiatry
+- JAMA Psychiatry
+
+---
+
+### 3. Obsidian 双向链接笔记
+
+自动生成结构化的 Obsidian 笔记：
+
+```markdown
+# rTMS/Stanford SNT - 行业顶尖科学家文献调研
+
+##  大佬名单
+
+### 1. [[Cole_EJ|Cole EJ]]
+身份：Stanford SNT 开创者
+代表文献:
+- [[PMID_32252538|Stanford Accelerated Intelligent...]]
+  期刊：Am J Psychiatry, 2020 ⭐ 开创性文献
+
+##  快速导航
+[[Cole_EJ]] [[Williams_NR]] [[Blumberger_DM]] ...
+```
 
 ---
 
@@ -44,171 +96,73 @@
 ### 安装
 
 ```bash
-git clone https://github.com/yourusername/medical-ai-search.git
+git clone https://github.com/YOUR_USERNAME/medical-ai-search.git
 cd medical-ai-search
 pip install -r requirements.txt
 ```
 
 ### 使用
 
+#### 方式 1: 找行业大佬
+
+```bash
+python3 simple_big_shot_finder.py
+```
+
+#### 方式 2: 一键文献调研
+
+```bash
+python3 big_shot_literature_survey.py
+```
+
+#### 方式 3: Python 调用
+
 ```python
-from ai_expert_discovery_agent import AIExpertDiscoveryAgent
+from big_shot_literature_survey import BigShotLiteratureSurvey
 
-# 初始化 Agent
-agent = AIExpertDiscoveryAgent()
-
-# 检索
-result = agent.search("Stanford SNT depression")
-
-# 打印结果
-agent.print_results(result)
-```
-
-### 输出
-
-```
-============================================================
-AI 领域专家发现 Agent v1.0.0
-检索主题：Stanford SNT depression
-============================================================
-
-📚 领域专家 (2 位):
-  1. Cole EJ (Stanford University)
-     文章数：10
-  2. Williams NR (Stanford University)
-     文章数：8
-
-⭐ 开创性文献 (1 篇):
-  1. (2020) Stanford Accelerated Intelligent Neuromodulation Therapy...
-     PMID: 32252538 | 期刊：American Journal of Psychiatry
-     标识：早期开创性研究 ✅
-
- 近期研究 (20 篇):
-  1. (2026) Stanford neuromodulation therapy for treatment-res...
-     PMID: 41536095
-  ...
+surveyor = BigShotLiteratureSurvey()
+result = surveyor.survey("stem cell CAR-T", top_n=10)
 ```
 
 ---
 
-##  系统架构
+##  实战测试
 
+### 测试领域：rTMS/Stanford SNT
+
+**测试结果**:
+
+| 指标 | 结果 |
+|------|------|
+| 找到大佬数 | 8 位 |
+| 高分文献数 | 13 篇 |
+| 开创性文献 | ✅ PMID 32252538 (Cole 2020) |
+| Obsidian 笔记 | ✅ 自动生成 |
+
+**核心发现**:
 ```
-输入：研究主题
-    ↓
-Step 1: Tavily 网络搜索
-    Query: "{topic} expert"
-    → 提取专家名字
-    ↓
-Step 2: PubMed 验证专家
-    Query: "Expert Name"
-    → 确认是该领域专家
-    ↓
-Step 3: 检索专家文章
-    Query: "Expert Name + topic"
-    → 获取所有文章
-    ↓
-Step 4: 按年份排序
-    → 早期文章 = 开创性文献
-    ↓
-输出：专家列表 + 开创性文献 + 近期研究
-```
+1. Cole EJ - Stanford SNT 开创者 ✅
+   - PMID 32252538 (2020 SNT 开创性研究)
+   - PMID 34711062 (2022 双盲 RCT)
 
----
+2. Williams NR - Stanford SNT 开创者 ✅
+   - PMID 38161297 (2024 长期疗效)
 
-##  核心功能
-
-### 1. 领域专家发现
-
-```python
-experts = agent.discover_experts("esketamine depression")
-# → ["Singh JB", "Zarate CA", "Lally N"]
-```
-
-### 2. 开创性文献识别
-
-```python
-landmark = agent.find_landmark_papers(experts)
-# → 按年份排序，早期文章自动识别
-```
-
-### 3. 多源验证
-
-- Tavily 网络搜索
-- PubMed 文献验证
-- AI 信息提取
-
-### 4. 结果导出
-
-```python
-# 保存为 JSON
-import json
-with open('result.json', 'w') as f:
-    json.dump(result, f, indent=2)
-
-# 导出为 RIS (EndNote/NoteExpress)
-agent.export_to_ris(result['landmark_papers'], 'landmark.ris')
+3. Blumberger DM - rTMS 高产出 ✅
+   - PMID 42415252 (2026 网络定位)
 ```
 
 ---
 
-##  测试记录
+##  与传统方法对比
 
-### 测试 1: Cole 2020 发现
-
-```
-传统检索："Stanford SNT depression"
-→ ❌ 找不到
-
-AI Agent："Cole EJ"
-→ ✅ 找到！PMID: 32252538
-```
-
-### 测试结果
-
-| 测试项目 | 传统方法 | AI Agent | 提升 |
-|----------|----------|----------|------|
-| Cole 2020 发现 | ❌ 0% | ✅ 100% | +100% |
-| 领域专家发现 | ❌ 0% | ✅ 100% | +100% |
-| 开创性文献识别 | ❌ 0% | ✅ 100% | +100% |
-
----
-
-##  使用场景
-
-### 场景 1: 新医生进入领域
-
-```python
-# 快速了解领域全貌
-agent = AIExpertDiscoveryAgent()
-result = agent.search("TMS depression")
-
-# 输出:
-# - 领域专家（学习方向）
-# - 开创性文献（必读经典）
-# - 近期研究（最新进展）
-```
-
-### 场景 2: 系统综述/Meta 分析
-
-```python
-# 确保不遗漏重要文献
-result = agent.search("topic")
-for paper in result['landmark_papers']:
-    print(f"必须引用：{paper['title']}")
-```
-
-### 场景 3: 验证检索完整性
-
-```python
-# 对比传统检索和 AI Agent
-conventional = searcher.search_comprehensive("topic")
-expert_result = agent.search("topic")
-
-# 检查是否有遗漏
-if expert_result['landmark_papers']:
-    print("发现额外的重要文献!")
-```
+| 特性 | 传统检索 | 本系统 |
+|------|----------|--------|
+| 搜索方式 | 关键词 | 身份标签 |
+| 数量限制 | Top 10 | 不设上限 |
+| 筛选标准 | 文章数 | 学会主席/指南作者/奖项 |
+| 文献质量 | 不分高低 | 只看顶级期刊 |
+| 输出格式 | 列表 | Obsidian 双向链接 |
 
 ---
 
@@ -216,14 +170,56 @@ if expert_result['landmark_papers']:
 
 ```
 medical-ai-search/
-├── ai_expert_discovery_agent.py    # 核心 Agent
-├── search_optimizer.py              # 检索优化
+├── simple_big_shot_finder.py       # 大佬发现系统
+├── big_shot_literature_survey.py   # 文献调研系统
 ├── literature_search.py             # PubMed 检索
-├── expert_discovery_system.py       # 专家发现系统
-├── requirements.txt                 # 依赖列表
+├── search_optimizer.py              # 检索优化
+├── medical_ai.py                    # 完整工作流
+├── requirements.txt                 # 依赖
 ├── README.md                        # 本文档
-├── AI_Expert_Discovery_Agent_Docs.md # 详细文档
-└── AI_Expert_Agent_Test_Record.md   # 测试记录
+├── RELEASE.md                       # 发布说明
+├── TEST_REPORT.md                   # 测试报告
+└── examples/                        # 使用示例
+```
+
+---
+
+##  使用场景
+
+### 场景 1: 新领域调研
+
+```python
+surveyor = BigShotLiteratureSurvey()
+result = surveyor.survey("stem cell diabetes")
+
+# 输出:
+# - 领域大佬名单 (10 位)
+# - 每位大佬的高分文献
+# - Obsidian 笔记 (双向链接)
+```
+
+### 场景 2: 学术会议邀请
+
+```python
+finder = SimpleBigShotFinder()
+big_shots = finder.find_big_shots("cancer immunotherapy")
+
+# 找到 keynote speaker 候选人
+keynote_candidates = [
+    e for e in big_shots 
+    if 'conference chair' in e['identities']
+]
+```
+
+### 场景 3: 合作者筛选
+
+```python
+# 找有实际资源的大佬
+result = surveyor.survey("CAR-T solid tumor")
+industry_leaders = [
+    e for e in result 
+    if 'society president' in e['identities']
+]
 ```
 
 ---
@@ -238,18 +234,6 @@ tavily-python>=0.3.0  # 可选，用于网络搜索
 
 ---
 
-##  贡献
-
-欢迎贡献！
-
-1. Fork 本项目
-2. 创建功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
-
----
-
 ##  许可证
 
 MIT License - 详见 [LICENSE](LICENSE) 文件
@@ -261,8 +245,8 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 如果您使用了这个工具，请引用：
 
 ```
-宵宵。AI Expert Discovery Agent v1.0.0. 2026-07-11.
-GitHub: https://github.com/yourusername/medical-ai-search
+宵宵。AI Medical Expert Discovery System v2.0. 2026-07-11.
+GitHub: https://github.com/YOUR_USERNAME/medical-ai-search
 ```
 
 ---
@@ -274,9 +258,23 @@ GitHub: https://github.com/yourusername/medical-ai-search
 
 ---
 
-##  致谢
+##  更新日志
 
-感谢提出"先找专家，再找文章"策略的医生用户！这个核心思想解决了开创性文献难发现的世界级难题。
+### v2.0 (2026-07-11)
+
+**新增**:
+- 大佬发现系统 (第一性原理版)
+- 文献调研一键执行
+- Obsidian 双向链接笔记
+- 高分期刊过滤
+- rTMS/Stanford SNT 实战测试
+
+### v1.0 (2026-07-11)
+
+**新增**:
+- 医学细分领域专家发现
+- 中英文双语支持
+- 机构信息自动提取
 
 ---
 
