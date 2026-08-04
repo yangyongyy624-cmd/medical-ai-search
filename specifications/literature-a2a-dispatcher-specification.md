@@ -61,6 +61,13 @@
 3. 禁止自己用 curl/wget 调任何学术 API
 4. 禁止以"更快"、"更简单"、"已经知道答案"为由跳过 A2A
 
+## 技术背景
+
+- **cc-connect v1.3.2**：不支持 system_prompt 字段，规则被静默忽略
+- **cc-connect v1.4.1**：支持 system_prompt，规则正确传递
+- **v1.0 问题**：Europe PMC 重复（路 2 和路 4），Semantic Scholar 未接，PubMed 仅 10 篇，无迭代
+- **v1.1 修复**：路 2 改为 Semantic Scholar，PubMed maxResults=50，加入多轮迭代 + 全文验证 + 标红
+
 ## 触发条件
 
 检索、查文献、搜索论文、找文章、综述、文献报告、高分文献、核心期刊
@@ -70,8 +77,12 @@
 - **v1.0** (2026-08-04): 初始版本，4 路并行（Europe PMC 重复）
 - **v1.1** (2026-08-05): 修复重复，加入 Semantic Scholar，PubMed maxResults=50，多轮迭代 + 全文验证 + 标红
 
-## 相关仓库
+## Skill 位置
 
-- Skill: `~/.claude/skills/literature-a2a-search/SKILL.md`
-- Obsidian: `~/Documents/Obsidian Vault/00-方法论/文献检索 A2A 调度器规范.md`
-- GitHub: `yangyongyy624-cmd/medical-ai-search → specifications/literature-a2a-dispatcher-specification.md`
+`~/.claude/skills/literature-a2a-search/SKILL.md`
+
+## 相关记忆
+
+- `[[pubmed-literature-search-workflow]]` — PubMed 直接 MCP 工作流（已废弃）
+- `[[feedback_literature_search]]` — 文献检索方法论
+- `[[literature-a2a-search-skill]]` — 文献检索 A2A 调度器 Skill
