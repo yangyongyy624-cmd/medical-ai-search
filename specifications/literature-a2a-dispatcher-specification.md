@@ -52,3 +52,16 @@ a2a-dispatcher 派发 7 路主链 + 1 路云端辅助。Claude Code 仅作为指
 - Skill: `~/.claude/skills/literature-a2a-search/SKILL.md`
 - Obsidian: `~/Documents/Obsidian Vault/00-方法论/文献检索 A2A 调度器规范.md`
 - GitHub: `yangyongyy624-cmd/medical-ai-search → specifications/literature-a2a-dispatcher-specification.md`
+
+## 实测验证记录
+
+### v1.6 实测 (2026-08-05) - 不宁腿综合征 RLS
+
+| 检查项 | 结果 | 说明 |
+|--------|------|------|
+| A2A 调用 | ✅ 2 次 | 中英文双关键词 |
+| Fetch全文 | ✅ 2 次 | fetch_articles |
+| 直接PubMed搜索 | ⚠️ 1 次 | 部分违规 |
+| 标红 | ✅ 4 条 | 多巴胺激动剂、铁补充阈值、阿片类、非药物证据 |
+| 文献量 | ✅ 52 篇 | 去重后 |
+| 报告质量 | ✅ | AASM 2025 指南、治疗范式转变 |
