@@ -19,13 +19,46 @@
 
 ## A2A 调度器 5 路并行架构
 
-| 路数 | Agent | API | 数据方向 |
-|------|-------|-----|---------|
-| 1 | openclaw-dandan | OpenAlex | 反向追踪（该文献引用了谁） |
-| 2 | openclaw-tongtong | **Semantic Scholar** | **正向追踪（哪些文章引用了该文献，142 篇/篇）** |
-| 3 | openclaw-cloud-xiaoxiao | CrossRef | 反向追踪（DOI 独有） |
-| 4 | openclaw-xiaoxiao | Europe PMC | 相关文献 |
-| 5 | 本地 pubmed-search.sh | **PubMed MCP（maxResults=50）** | 临床文献核心库 |
+| 路数 | API | 数据方向 | 调用方式 |
+|------|-----|---------|---------|
+| 1 | OpenAlex | 反向追踪（该文献引用了谁） | 直接 curl |
+| 2 | Semantic Scholar | 正向追踪（哪些文章引用了该文献，142 篇/篇） | 直接 curl |
+| 3 | CrossRef | 反向追踪（DOI 独有） | 直接 curl |
+| 4 | Europe PMC | 相关文献 | 直接 curl |
+| 5 | PubMed MCP（maxResults=50） | 临床文献核心库 | pubmed-search.sh |
+
+## 三层强约束
+
+### 1. 工具层约束（最强制）
+
+cc-connect `config.toml` 中配置 `disallowed_tools`：
+
+```toml
+disallowed_tools = [
+    "mcp__pubmed__pubmed_search_articles",
+    "mcp__pubmed__pubmed_europepmc_search",
+]
+```
+
+**禁搜索，保留辅助工具：**
+
+| 工具 | 状态 | 用途 |
+|------|------|------|
+| pubmed_search_articles | 🔴 禁止 | 防止直接搜索 PubMed |
+| pubmed_europepmc_search | 🔴 禁止 | 防止直接搜索 Europe PMC |
+| pubmed_fetch_articles | ✅ 保留 | 查特定 PMID 的文章详情 |
+| pubmed_fetch_fulltext | ✅ 保留 | 读 PMC 全文（交叉验证 + 标红必须） |
+| pubmed_find_related | ✅ 保留 | 基于 PMID 找相关文章（引用链迭代用） |
+| pubmed_lookup_mesh | ✅ 保留 | MeSH 词查询（优化检索式用） |
+| pubmed_convert_ids | ✅ 保留 | ID转换（DOI↔PMID 互转） |
+
+### 2. 提示词层约束
+
+cc-connect `system_prompt` 中声明铁律规则（已在所有 agent 中加载）
+
+### 3. 流程层约束
+
+a2a-dispatcher 直接 curl 调用 5 路 API，不依赖 agent 能力
 
 ## 多轮迭代流程
 
@@ -37,7 +70,7 @@
 5. 重复 3-4 步，最多 4 轮
 6. 每轮合并去重
 7. 基于全部结果整理回复（标注 PMID、DOI、被引次数）
-8. 对于 PMC 开放获取的文献，读取全文进行交叉验证
+8. 对于 PMC 开放获取的文献，用 pubmed_fetch_fulltext 读取全文进行交叉验证
 9. 发现矛盾的观点 → 标红 🔴 并说明理由
 ```
 
@@ -61,13 +94,6 @@
 3. 禁止自己用 curl/wget 调任何学术 API
 4. 禁止以"更快"、"更简单"、"已经知道答案"为由跳过 A2A
 
-## 技术背景
-
-- **cc-connect v1.3.2**：不支持 system_prompt 字段，规则被静默忽略
-- **cc-connect v1.4.1**：支持 system_prompt，规则正确传递
-- **v1.0 问题**：Europe PMC 重复（路 2 和路 4），Semantic Scholar 未接，PubMed 仅 10 篇，无迭代
-- **v1.1 修复**：路 2 改为 Semantic Scholar，PubMed maxResults=50，加入多轮迭代 + 全文验证 + 标红
-
 ## 触发条件
 
 检索、查文献、搜索论文、找文章、综述、文献报告、高分文献、核心期刊
@@ -76,13 +102,20 @@
 
 - **v1.0** (2026-08-04): 初始版本，4 路并行（Europe PMC 重复）
 - **v1.1** (2026-08-05): 修复重复，加入 Semantic Scholar，PubMed maxResults=50，多轮迭代 + 全文验证 + 标红
+- **v1.2** (2026-08-05): 添加 disallowed_tools 工具层强约束，保留辅助工具，禁搜索
+- **v1.3** (2026-08-05): A2A 改为直接 curl 调用 5 路 API（不依赖 agent 能力），完整验证通过
 
-## Skill 位置
+## 技术背景
 
-`~/.claude/skills/literature-a2a-search/SKILL.md`
+- **cc-connect v1.3.2**：不支持 system_prompt 字段，规则被静默忽略
+- **cc-connect v1.4.1**：支持 system_prompt，规则正确传递
+- **v1.0 问题**：Europe PMC 重复，Semantic Scholar 未接，PubMed 仅 10 篇，无迭代
+- **v1.1 修复**：路 2 改为 Semantic Scholar，PubMed maxResults=50，加入多轮迭代 + 全文验证 + 标红
+- **v1.2 修复**：添加 disallowed_tools 约束，Claude 仍可直接调 PubMed MCP
+- **v1.3 修复**：A2A dispatcher 改为直接 curl（不依赖 agent），彻底解决 agent 无法执行 API 调用的问题
 
-## 相关记忆
+## 相关仓库
 
-- `[[pubmed-literature-search-workflow]]` — PubMed 直接 MCP 工作流（已废弃）
-- `[[feedback_literature_search]]` — 文献检索方法论
-- `[[literature-a2a-search-skill]]` — 文献检索 A2A 调度器 Skill
+- Skill: `~/.claude/skills/literature-a2a-search/SKILL.md`
+- Obsidian: `~/Documents/Obsidian Vault/00-方法论/文献检索 A2A 调度器规范.md`
+- GitHub: `yangyongyy624-cmd/medical-ai-search → specifications/literature-a2a-dispatcher-specification.md`
