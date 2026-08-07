@@ -79,3 +79,17 @@ a2a-dispatcher 派发 7 路主链 + 1 路云端辅助。Claude Code 仅作为指
 | 系统稳定 | ✅ | 无崩溃、无阻塞 |
 
 **v2.0 架构**：5路并行检索 → 自动去重 → 质量评分（被引+年份+类型）→ 输出 PMID/DOI 列表 → Claude 做引用链迭代
+
+### v2.1 改进 (2026-08-07)
+- PubMed 路修复：esummary + efetch 获取完整信息（标题/年份/来源）
+- system_prompt 强化：全文验证放在最前面（生死攸关级别）
+- 明确要求调用 fetch_fulltext 读全文，禁止仅凭摘要写报告
+
+### 已知问题
+- ❌ disallowed_tools 对 MCP 工具无效（Claude Code 限制）
+- ❌ Hook 不生效（Claude Code 2.x 不支持 pre-tool-use hooks）
+- ❌ 飞书消息路由问题（需检查事件订阅配置）
+
+### 待解决
+- 需要 cc-connect 上游修复 disallowed_tools 对 MCP 的拦截
+- 或移除 Claude Code 的 PubMed MCP 配置（彻底禁掉）
